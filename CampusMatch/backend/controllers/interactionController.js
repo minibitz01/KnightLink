@@ -1,4 +1,5 @@
 const Interaction = require("../models/Interaction");
+const Match = require("../models/Match");
 
 
 // Create an interaction (like or reject)
@@ -65,9 +66,18 @@ const createInteraction = async (req, res) => {
                 await mutualLike.save();
 
 
+                // Create match record
+                const match = await Match.create({
+                    matchid: interaction._id,
+                    User_id1: fromUserId,
+                    User_id2: toUserId
+                });
+
+
                 return res.status(201).json({
                     message: "It's a match!",
-                    interaction
+                    interaction,
+                    match
                 });
             }
         }
